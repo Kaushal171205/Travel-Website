@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Bar with Sort by Season or Month</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      
+      
+    }
+
+    .search-container {
+      position: relative;
+      width: 300px;
+      margin: auto ;
+     
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px;
+      padding-right: 40px; /* Space for the icon */
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .sort-icon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      cursor: pointer;
+      font-size: 18px;
+      color: #555;
+    }
+
+    .dropdown, .season-dropdown, .month-dropdown {
+      position: absolute;
+      top: 45px;
+      left: 0;
+      right: 0;
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      display: none;
+    }
+
+    .dropdown div, .season-dropdown div, .month-dropdown div {
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .dropdown div:hover, .season-dropdown div:hover, .month-dropdown div:hover {
+      background-color: #f1f1f1;
+    }
+    * { 
+  margin : 0;
+  padding: 0;
+  box-sizing : border-box;
+  font-family : "Poppins", sans-serif;
+}
+body {
+   
+  background:linear-gradient(to right,blue,white)
+  
+}
+
+.container {
+  position : relative;
+  width : 300px;
+  display : flex;
+  align-items : center;
+  justify-content : center;
+  flex-wrap : wrap;
+  padding : 30px;  
+}
+
+.container .card {
+  position: relative;
+  max-width : 300px;
+  height : 215px;  
+  background-color : #fff;
+  margin : 30px 10px;
+  padding : 20px 15px;
+  
+  display : flex;
+  flex-direction : column;
+  box-shadow : 0 5px 20px rgba(0,0,0,0.5);
+  transition : 0.3s ease-in-out;
+  border-radius : 15px;
+}
+.container .card:hover {
+  height : 320px;    
+}
+
+
+.container .card .image {
+  position : relative;
+  width : 260px;
+  height : 260px;
+  
+  top : -40%;
+  left: 8px;
+  box-shadow : 0 5px 20px rgba(0,0,0,0.2);
+  z-index : 1;
+}
+
+.container .card .image img {
+  max-width : 100%;
+  border-radius : 15px;
+}
+
+.container .card .content {
+  position : relative;
+  top : -140px;
+  padding : 10px 15px;
+  color : #111;
+  text-align : center;
+  
+  visibility : hidden;
+  opacity : 0;
+  transition : 0.3s ease-in-out;
+    
+}
+
+.container .card:hover .content {
+   margin-top : 30px;
+   visibility : visible;
+   opacity : 1;
+   transition-delay: 0.2s;
+  
+}
+.jan-feb{
+    display: none;
+    margin-top: 100px;
+    /* display: flex; */
+    flex-direction: row;
+    column-gap: 20px;
+    flex-wrap: wrap;
+    padding-left: 10%;
+}
+.mar-apr{
+    display: none;
+    margin-top: 100px;
+    /* display: flex; */
+    flex-direction: row;
+    column-gap: 20px;
+    flex-wrap: wrap;
+    padding-left: 10%;
+}
+.may-june{
+    display: none;
+    margin-top: 100px;
+    /* display: flex; */
+    flex-direction: row;
+    column-gap: 20px;
+    flex-wrap: wrap;
+    padding-left: 10%;
+}
+.july-aug{
+    display: none;
+    margin-top: 100px;
+    /* display: flex; */
+    flex-direction: row;
+    column-gap: 20px;
+    flex-wrap: wrap;
+    padding-left: 10%;
+}
+.sep-oct{
+    display: none;
+    margin-top: 100px;
+    /* display: flex; */
+    flex-direction: row;
+    column-gap: 20px;
+    flex-wrap: wrap;
+    padding-left: 10%;
+}
+.nov-dec{
+    display: none;
+    margin-top: 100px;
+    /* display: flex; */
+    flex-direction: row;
+    column-gap: 20px;
+    flex-wrap: wrap;
+    padding-left: 10%;
+}
+.Active{
+    display: flex;
+}
+  </style>
+</head>
+<body>
+
+<div class="search-container">
+  <input type="text" class="search-input" placeholder="Search city..." id="searchBar">
+  <span class="sort-icon" onclick="toggleDropdown()">&#x25BC;</span> <!-- Sort Icon -->
+  
+  <!-- Main dropdown for sort by Season/Month -->
+  <div class="dropdown" id="dropdown">
+    <div onclick="sortBy('season')">Sort by Season</div>
+    <div onclick="sortBy('month')">Sort by Month</div>
+  </div>
+
+  <!-- Season selection dropdown (hidden by default) -->
+  <div class="season-dropdown" id="seasonDropdown">
+    <div onclick="selectSeason('Winter')">Winter</div>
+    <div onclick="selectSeason('Summer')">Summer</div>
+    <div onclick="selectSeason('Spring')">Spring</div>
+    <div onclick="selectSeason('Rainy')">Rainy</div>
+    <div onclick="selectSeason('Autumn')">Autumn</div>
+  </div>
+
+  <!-- Month selection dropdown (hidden by default) -->
+  <div class="month-dropdown" id="monthDropdown">
+    <div onclick="selectMonth('January')" class="months">January</div>
+    <div onclick="selectMonth('February')" class="months">February</div>
+    <div onclick="selectMonth('March')" class="months">March</div>
+    <div onclick="selectMonth('April')" class="months">April</div>
+    <div onclick="selectMonth('May')" class="months">May</div>
+    <div onclick="selectMonth('June')" class="months">June</div>
+    <div onclick="selectMonth('July')" class="months">July</div>
+    <div onclick="selectMonth('August')" class="months">August</div>
+    <div onclick="selectMonth('September')" class="months">September</div>
+    <div onclick="selectMonth('October')" class="months">October</div>
+    <div onclick="selectMonth('November')" class="months">November</div>
+    <div onclick="selectMonth('December')" class="months">December</div>
+  </div>
+</div>
+
+<script>
+
+  // Function to toggle the main dropdown
+  function toggleDropdown() {
+    const dropdown = document.getElementById('dropdown');
+    if (dropdown.style.display === 'block') {
+      dropdown.style.display = 'none';
+    } else {
+      dropdown.style.display = 'block';
+      hideSeasonDropdown();  // Hide if season dropdown is showing
+      hideMonthDropdown();   // Hide if month dropdown is showing
+    }
+  }
+
+  // Hide dropdowns when clicking outside
+  document.addEventListener('click', function(event) {
+    const dropdown = document.getElementById('dropdown');
+    const searchBar = document.getElementById('searchBar');
+    const sortIcon = document.querySelector('.sort-icon');
+    const seasonDropdown = document.getElementById('seasonDropdown');
+    const monthDropdown = document.getElementById('monthDropdown');
+    
+    if (!searchBar.contains(event.target) && !dropdown.contains(event.target) && !sortIcon.contains(event.target) && 
+        !seasonDropdown.contains(event.target) && !monthDropdown.contains(event.target)) {
+      dropdown.style.display = 'none';
+      seasonDropdown.style.display = 'none';
+      monthDropdown.style.display = 'none';
+    }
+  });
+
+  // Function to handle sort by Season or Month selection
+  function sortBy(type) {
+    document.getElementById('dropdown').style.display = 'none';
+    if (type === 'season') {
+      showSeasonDropdown();
+    } else if (type === 'month') {
+      showMonthDropdown();
+    }
+  }
+
+  // Show the season selection dropdown
+  function showSeasonDropdown() {
+    const seasonDropdown = document.getElementById('seasonDropdown');
+    seasonDropdown.style.display = 'block';
+  }
+
+  // Hide the season selection dropdown
+  function hideSeasonDropdown() {
+    const seasonDropdown = document.getElementById('seasonDropdown');
+    seasonDropdown.style.display = 'none';
+  }
+
+  // Show the month selection dropdown
+  function showMonthDropdown() {
+    const monthDropdown = document.getElementById('monthDropdown');
+    monthDropdown.style.display = 'block';
+  }
+
+  // Hide the month selection dropdown
+  function hideMonthDropdown() {
+    const monthDropdown = document.getElementById('monthDropdown');
+    monthDropdown.style.display = 'none';
+  }
+
+  // Function to select a specific season
+  function selectSeason(season) {
+    document.getElementById('seasonDropdown').style.display = 'none';
+    // alert(`You selected ${season} season.`);
+    if(season == 'Summer'){
+        let a = document.querySelector("[data-marapr]");
+        let b = document.querySelector("[data-mayjune]");
+        a.classList.add("Active");
+        b.classList.add("Active");
+        
+    }
+    else if(season == "Spring" || season == "Autumn"){
+        let a = document.querySelector("[data-janfeb]");
+        a.classList.add("Active");
+    }
+    else if(season == "Rainy"){
+        let a = document.querySelector("[data-septoct]");
+        a.classList.add("Active");
+    }
+    else if(season == "Winter"){
+        let a = document.querySelector("[data-janfeb]");
+        let b = document.querySelector("[data-novdec]");
+        a.classList.add("Active");
+        b.classList.add("Active");
+    }
+    // Add sorting/filtering logic based on the selected season here
+}
+
+  // Function to select a specific month
+  function selectMonth(month) {
+    document.getElementById('monthDropdown').style.display = 'none';
+    // alert(`You selected ${month}.`);
+    // Add sorting/filtering logic based on the selected month here
+    if(month==="January" || month=="February"){
+        let a = document.querySelector("[data-janfeb]");
+        a.classList.add("Active");
+    }
+    else if(month==="March" || month=="April"){
+        let a = document.querySelector("[data-marapr]");
+        a.classList.add("Active");
+    }
+    else if(month==="May" || month=="June"){
+        let a = document.querySelector("[data-mayjune]");
+        a.classList.add("Active");
+    }
+    else if(month==="July" || month=="August"){
+        let a = document.querySelector("[data-julyaug]");
+        a.classList.add("Active");
+    }
+    else if(month==="September" || month=="October"){
+        let a = document.querySelector("[data-septoct]");
+        a.classList.add("Active");
+    }
+    else if(month==="November" || month=="December"){
+        let a = document.querySelector("[data-septoct]");
+        a.classList.add("Active");
+    }
+  }
+</script>
+<div class="jan-feb" data-janfeb>
+    <div class = container>
+        
+      <div class = card>
+        <div class = image>
+          <img href = "#" src ="Shimla.jpg">
+          <h3>SHIMLA</h3>
+        </div>
+        <div class = content>
+            
+          <h3>This is content</h3>
+          <p>Here you can enjoy snowfall and winter sports .</p>
+        </div>
+      </div>    
+    </div>
+    <div class = container>
+        
+      <div class = card>
+        <div class = image>
+          <img href = "#" src ="Manali.jpg">
+          <h3>MANALI</h3>
+        </div>
+        <div class = content>
+          <h3>This is content</h3>
+          <p>Here you can experiance skeiing , snowboarding and scenic beauty.</p>
+        </div>
+      </div>    
+    </div>
+    <div class = container>
+        <div class = card>
+          <div class = image>
+            <img href = "#" src ="mussorie.jpg">
+            <h3>MUSSORIE</h3>
+          </div>
+          <div class = content>
+            <h3>This is content</h3>
+            <p>Here you can experiance scenic views,trekking and relaxation.</p>
+          </div>
+        </div>    
+      </div>
+      <div class = container>
+        <div class = card>
+          <div class = image>
+            <img href = "#" src ="goa.jpg">
+            <h3>GOA</h3>
+          </div>
+          <div class = content>
+            <h3>This is content</h3>
+            <p>Vibrant nightlife and beaches and water sports.</p>
+          </div>
+        </div>    
+      </div>
+      <div class = container>
+        <div class = card>
+          <div class = image>
+            <img href = "#" src ="andaman nicobar.jpg">
+            <h3>ANDAMAN AND NICOBAR</h3>
+          </div>
+          <div class = content>
+            <h3>This is content</h3>
+            <p>More about natural beauty where you can see crystal clear water and snorkeling and diving .</p>
+          </div>
+        </div>    
+      </div>
+      <div class = container>
+        <div class = card>
+          <div class = image>
+            <img href = "#" src ="Kerala.jpg">
+            <h3>KERALA</h3>
+          </div>
+          <div class = content>
+            <h3>This is content</h3>
+            <p>Witness traditional boats races and cultural events .</p>
+          </div>
+        </div>    
+      </div>
+    </div>
+    <div class="mar-apr" data-marapr>
+        <div class = container>
+            
+          <div class = card>
+            <div class = image>
+              <img href = "#" src ="goa.jpg">
+              <h3>GOA</h3>
+            </div>
+            <div class = content>
+                
+              <h3>This is content</h3>
+              <p>DIn publishing and graphic design,           Lorem ipsum is a placeholder text               commonly used to demonstrate the visual         form of a document or a typeface without         relying on meaningful content.</p>
+            </div>
+          </div>    
+        </div>
+        <div class = container>
+            
+          <div class = card>
+            <div class = image>
+              <img href = "#" src ="Mannar.jpg">
+              <h3>MUNNAR</h3>
+            </div>
+            <div class = content>
+              <h3>This is content</h3>
+              <p>DIn publishing and graphic design,           Lorem ipsum is a placeholder text               commonly used to demonstrate the visual         form of a document or a typeface without         relying on meaningful content.</p>
+            </div>
+          </div>    
+        </div>
+        <div class = container>
+            <div class = card>
+              <div class = image>
+                <img href = "#" src ="ooty.jpg">
+                <h3>OOTY</h3>
+              </div>
+              <div class = content>
+                <h3>This is content</h3>
+                <p>DIn publishing and graphic design,           Lorem ipsum is a placeholder text               commonly used to demonstrate the visual         form of a document or a typeface without         relying on meaningful content.</p>
+              </div>
+            </div>    
+          </div>
+          <div class = container>
+            <div class = card>
+              <div class = image>
+                <img href = "#" src ="Udaipur.jpg">
+                <h3>UDAIPUR</h3>
+              </div>
+              <div class = content>
+                <h3>This is content</h3>
+                <p>DIn publishing and graphic design,           Lorem ipsum is a placeholder text               commonly used to demonstrate the visual         form of a document or a typeface without         relying on meaningful content.</p>
+              </div>
+            </div>    
+          </div>
+          <div class = container>
+            <div class = card>
+              <div class = image>
+                <img href = "#" src ="gangtok.jpg">
+                <h3>GANGTOK</h3>
+              </div>
+              <div class = content>
+                <h3>This is content</h3>
+                <p>DIn publishing and graphic design,           Lorem ipsum is a placeholder text               commonly used to demonstrate the visual         form of a document or a typeface without         relying on meaningful content.</p>
+              </div>
+            </div>    
+          </div>
+          <div class = container>
+            <div class = card>
+              <div class = image>
+                <img href = "#" src ="coorg.jpg">
+                <h3>COORG</h3>
+              </div>
+              <div class = content>
+                <h3>This is content</h3>
+                <p>DIn publishing and graphic design,           Lorem ipsum is a placeholder text               commonly used to demonstrate the visual         form of a document or a typeface without         relying on meaningful content.</p>
+              </div>
+            </div>    
+          </div>
+        </div>
+        <div class="may-june" data-mayjune>
+            <div class = container>
+                
+              <div class = card>
+                <div class = image>
+                  <img href = "#" src ="tirthan valley.jpg">
+                  <h3>TIRTHAN VALLEY</h3>
+                </div>
+                <div class = content>
+                    
+                  <h3>This is content</h3>
+                  <p>Trek,fish or simply unwind in the great himalayan national park.</p>
+                </div>
+              </div>    
+            </div>
+            <div class = container>
+                
+              <div class = card>
+                <div class = image>
+                  <img href = "#" src ="kudremukh.jpg">
+                  <h3>KUDREMUKH</h3>
+                </div>
+                <div class = content>
+                  <h3>This is content</h3>
+                  <p>Explore expensive green meadows and misty landscapes, perfect for treking</p>         </div>
+              </div>    
+            </div>
+            <div class = container>
+                <div class = card>
+                  <div class = image>
+                    <img href = "#" src ="wayaland.jpg">
+                    <h3>WAYANAD</h3>
+                  </div>
+                  <div class = content>
+                    <h3>This is content</h3>
+                    <p>Enjoy Spice plantation , wildlife and pictureques Banasura Sagar dam</p>
+                  </div>
+                </div>    
+              </div>
+              <div class = container>
+                <div class = card>
+                  <div class = image>
+                    <img href = "#" src ="chikmagalaur.jpg">
+                    <h3>CHIKMAGALUR</h3>
+                  </div>
+                  <div class = content>
+                    <h3>This is content</h3>
+                    <p>It includes Coffee plantation trekking and camping</p>
+                  </div>
+                </div>    
+              </div>
+              <div class = container>
+                <div class = card>
+                  <div class = image>
+                    <img href = "#" src ="shiv wala.jpg">
+                    <h3>SHIVANASAMUDRA FALLS</h3>
+                  </div>
+                  <div class = content>
+                    <h3>This is content</h3>
+                    <p>Surronded by Lust forest , this is the second largest waterfall in India which is perfect for photography enthusiasist</p>
+                  </div>
+                </div>    
+              </div>
+              <div class = container>
+                <div class = card>
+                  <div class = image>
+                    <img href = "#" src ="dudhsagr .jpg">
+                    <h3>DUDHSAGAR</h3>
+                  </div>
+                  <div class = content>
+                    <h3>This is content</h3>
+                    <p>Here you can witness the majestic 1017 feet highwater falls which are surronded by lush greenery which is suitable for honey mooners</p>
+                  </div>
+                </div>    
+              </div>
+            </div>
+        <div class="july-aug" data-julyaug>
+            <div class = container>
+                
+              <div class = card>
+                <div class = image>
+                  <img href = "#" src ="Ladakh.jpg">
+                  <h3>LADAKH FESTIVAL</h3>
+                </div>
+                <div class = content>
+                    
+                  <h3>This is content</h3>
+                  <p>the festival has culturural performances ,music and traditional sports .</p>
+                </div>
+              </div>    
+            </div>
+            <div class = container>
+                
+              <div class = card>
+                <div class = image>
+                  <img href = "#" src ="Basakhi.jpg">
+                  <h3>BAISAKHI IN PUNJAB</h3>
+                </div>
+                <div class = content>
+                  <h3>This is content</h3>
+                  <p>Festival is celebrated across Punjab and Haryana</p>
+                </div>
+              </div>    
+            </div>
+            <div class = container>
+                <div class = card>
+                  <div class = image>
+                    <img href = "#" src ="spiti.jpg">
+                    <h3>SPITI VALLEY</h3>
+                  </div>
+                  <div class = content>
+                    <h3>This is content</h3>
+                    <p>Here you can discover ancient monesties , scenic villages and adventure activites.</p>
+                  </div>
+                </div>    
+              </div>
+              <div class = container>
+                <div class = card>
+                  <div class = image>
+                    <img href = "#" src ="Kashmir.jpg">
+                    <h3>JAMMU AND KASHMIR</h3>
+                  </div>
+                  <div class = content>
+                    <h3>This is content</h3>
+                    <p>here you can witness breathtaking landscapes,trekking trails and cultural experiances .</p>
+                  </div>
+                </div>    
+              </div>
+              <div class = container>
+                <div class = card>
+                  <div class = image>
+                    <img href = "#" src ="Darjling.jpg">
+                    <h3>DARJEELING</h3>
+                  </div>
+                  <div class = content>
+                    <h3>This is content</h3>
+                    <p>Savor tea gardens , toy train rides , himalayan views with temperature variance</p>
+                  </div>
+                </div>    
+              </div>
+              <div class = container>
+                <div class = card>
+                  <div class = image>
+                    <img href = "#" src ="Kerala.jpg">
+                    <h3>KASHMIR VALLEY</h3>
+                  </div>
+                  <div class = content>
+                    <h3>This is content</h3>
+                    <p>Enjoy scenic views , gulmarg ,sonmarg and srinagar dal lake </p>
+                  </div>
+                </div>    
+              </div>
+            </div>
+        <div class="sep-oct" data-septoct>
+            <div class = container>
+                
+              <div class = card>
+                <div class = image>
+                  <img href = "#" src ="Varanasi.jpg">
+                  <h3>VARANASI NAVARATRI</h3>
+                </div>
+                <div class = content>
+                    
+                  <h3>This is content</h3>
+                  <p> you can experiance spiritual fervor </p>
+                </div>
+              </div>    
+            </div>
+            <div class = container>
+                
+              <div class = card>
+                <div class = image>
+                  <img href = "#" src ="Gujarat.jpg">
+                  <h3>GUJARAT GARBA</h3>
+                </div>
+                <div class = content>
+                  <h3>This is content</h3>
+                  <p>Celebrate garba and dandiya dance</p>
+                </div>
+              </div>    
+            </div>
+            <div class = container>
+                <div class = card>
+                  <div class = image>
+                    <img href = "#" src ="Onam.jpg">
+                    <h3>KERALA ONAM</h3>
+                  </div>
+                  <div class = content>
+                    <h3>This is content</h3>
+                    <p>Witness traditional boat races and cultural event</p>
+                  </div>
+                </div>    
+              </div>
+              <div class = container>
+                <div class = card>
+                  <div class = image>
+                    <img href = "#" src ="rajasthan.jpg">
+                    <h3>RAJASTHAN DUSSEHRA </h3>
+                  </div>
+                  <div class = content>
+                    <h3>This is content</h3>
+                    <p>Enjoy festivities,folk music and traditional performances        relying on meaningful content.</p>
+                  </div>
+                </div>    
+              </div>
+              <div class = container>
+                <div class = card>
+                  <div class = image>
+                    <img href = "#" src ="jim corbatt.jpg">
+                    <h3>CORBETT NATIONAL PARK</h3>
+                  </div>
+                  <div class = content>
+                    <h3>This is content</h3>
+                    <p>Wildlife Safari</p>
+                  </div>
+                </div>    
+              </div>
+              <div class = container>
+                <div class = card>
+                  <div class = image>
+                    <img href = "#" src ="kaziranga.jpg">
+                    <h3>KAZIRANGA NATIONAL PARK</h3>
+                  </div>
+                  <div class = content>
+                    <h3>This is content</h3>
+                    <p>Here you can see One Horned rhinoceros.</p>
+                  </div>
+                </div>    
+              </div>
+            </div>
+        <div class="nov-dec" data-novdec> 
+            <div class = container>
+                
+              <div class = card>
+                <div class = image>
+                  <img href = "#" src ="rantham.jpg">
+                  <h3>RANTHAMBORE NATIONAL PARK</h3>
+                </div>
+                <div class = content>
+                    
+                  <h3>This is content</h3>
+                  <p>Tiger spotting </p>
+                </div>
+              </div>    
+            </div>
+            <div class = container>
+                
+              <div class = card>
+                <div class = image>
+                  <img href = "#" src ="Varanasi.jpg">
+                  <h3>VARANASI DIWALI</h3>
+                </div>
+                <div class = content>
+                  <h3>This is content</h3>
+                  <p>Experiance spiritual atmosphere all around .</p>
+                </div>
+              </div>    
+            </div>
+            <div class = container>
+                <div class = card>
+                  <div class = image>
+                    <img href = "#" src ="sunburn.jpg">
+                    <h3>SUNBURN FESTIVAL GOA</h3>
+                  </div>
+                  <div class = content>
+                    <h3>This is content</h3>
+                    <p>Music fest and electronic dance </p>
+                  </div>
+                </div>    
+              </div>
+              <div class = container>
+                <div class = card>
+                  <div class = image>
+                    <img href = "#" src ="camel fair.jpg">
+                    <h3>PUSHKAR CAMEL FAIR RAJASTHAN </h3>
+                  </div>
+                  <div class = content>
+                    <h3>This is content</h3>
+                    <p>Witness colourful Camel in rajasthan.</p>
+                  </div>
+                </div>    
+              </div>
+              <div class = container>
+                <div class = card>
+                  <div class = image>
+                    <img href = "#" src ="jim corbatt.jpg">
+                    <h3>CORBETT NATIONAL PARK</h3>
+                  </div>
+                  <div class = content>
+                    <h3>This is content</h3>
+                    <p>Wildlife Adventure .</p>
+                  </div>
+                </div>    
+              </div>
+              <div class = container>
+                <div class = card>
+                  <div class = image>
+                    <img href = "#" src ="kaziranga.jpg">
+                    <h3>KAZIRANGA NATIONAL PARK</h3>
+                  </div>
+                  <div class = content>
+                    <h3>This is content</h3>
+                    <p>One horned Rhinoceros </p>
+                  </div>
+                </div>    
+              </div>
+            </div>
+</body>
+</html>
